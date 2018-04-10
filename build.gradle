@@ -1,0 +1,43 @@
+apply plugin: 'cpp'
+
+task wrapper (type: Wrapper) {
+    gradleVersion = '4.6'
+}
+
+model {
+    toolChains {
+        gcc (Gcc) {
+            eachPlatform {
+                cppCompiler.withArguments { args -> 
+                    args << '-O2'
+                    args << '-g'
+                    args << '-Wall'
+                    args << '-std=c++14'                    
+                }
+
+                linker.withArguments { args ->
+                    args << '-lGL'
+                    args << '-lglfw'
+                    args << '-lGLEW'
+                }
+            }
+        }        
+    }
+    
+    components {
+        hello_world (NativeExecutableSpec) {
+            sources {
+                cpp {
+                    source {
+                        srcDir "src/hello_world/cpp"
+                        include "**/*.cpp"
+                    }
+
+                    exportedHeaders {
+                        srcDir "src/hello_world/include"
+                    }
+                }
+            }
+        }
+    }    
+}
