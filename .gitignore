@@ -98,3 +98,5 @@ gradle-app.setting
 
 # End of https://www.gitignore.io/api/c++,linux,gradle,windows,visualstudiocode
 
+.project
+.settings/*
