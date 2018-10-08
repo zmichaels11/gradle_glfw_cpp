@@ -1,29 +1,10 @@
 apply plugin: 'cpp'
 
 task wrapper (type: Wrapper) {
-    gradleVersion = '4.6'
+    gradleVersion = '4.10.2'
 }
 
 model {
-    toolChains {
-        gcc (Gcc) {
-            eachPlatform {
-                cppCompiler.withArguments { args -> 
-                    args << '-O2'
-                    args << '-g'
-                    args << '-Wall'
-                    args << '-std=c++14'                    
-                }
-
-                linker.withArguments { args ->
-                    args << '-lGL'
-                    args << '-lglfw'
-                    args << '-lGLEW'
-                }
-            }
-        }        
-    }
-    
     components {
         hello_world (NativeExecutableSpec) {
             sources {
@@ -36,6 +17,18 @@ model {
                     exportedHeaders {
                         srcDir "src/hello_world/include"
                     }
+                }
+            }
+
+            binaries.all {
+                if (toolChain instanceof VisualCpp) {
+                    cppCompiler.args << "/std:c++14"
+                    //TODO: link GLFW, GLEW, OpenGL 
+                } else {
+                    cppCompiler.args << "-std=c++14"
+                    linker.args << "-lGL"
+                    linker.args << "-lglfw"
+                    linker.args << "-lGLEW"
                 }
             }
         }
